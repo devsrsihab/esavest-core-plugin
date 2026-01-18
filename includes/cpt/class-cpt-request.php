@@ -43,6 +43,9 @@ class ESAVEST_Core_CPT_Request {
 
         add_action('restrict_manage_posts', [$this, 'admin_seen_filter_dropdown']);
 
+        add_action('admin_post_esavest_add_price_list', [$this, 'handle_add_price_list']);
+
+
     }
 
     public function admin_seen_filter_dropdown() {
@@ -69,7 +72,84 @@ class ESAVEST_Core_CPT_Request {
             'normal',
             'default'
         );
+
+         // ✅ NEW: Price List metabox
+        add_meta_box(
+            'esavest_request_price_lists',
+            'Partner Price Lists',
+            [$this, 'render_price_list_metabox'],
+            self::POST_TYPE,
+            'normal',
+            'default'
+        );
     }
+
+    public function render_price_list_metabox($post) {
+
+        if (!current_user_can('manage_options')) {
+            echo '<p>You do not have permission.</p>';
+            return;
+        }
+
+        // Prices under this request
+        $prices = class_exists('ESAVEST_Core_CPT_Price')
+            ? ESAVEST_Core_CPT_Price::get_prices_by_request($post->ID)
+            : [];
+
+        // Partner list (simple: all users who can "read" - তুমি চাইলে later role filter করবে)
+        $partners = get_users([
+            'orderby' => 'display_name',
+            'order'   => 'ASC',
+            'fields'  => ['ID', 'display_name', 'user_email'],
+        ]);
+
+        wp_nonce_field('esavest_add_price_list_action', 'esavest_add_price_list_nonce');
+
+        include ESAVEST_CORE_PATH . 'admin/views/request-price-list-metabox.php';
+    }
+
+    public function handle_add_price_list() {
+
+        if (!current_user_can('manage_options')) {
+            wp_die('Permission denied');
+        }
+
+        if (
+            !isset($_POST['esavest_add_price_list_nonce']) ||
+            !wp_verify_nonce($_POST['esavest_add_price_list_nonce'], 'esavest_add_price_list_action')
+        ) {
+            wp_die('Security check failed');
+        }
+
+        $request_id = isset($_POST['request_id']) ? (int) $_POST['request_id'] : 0;
+        $partner_id = isset($_POST['partner_id']) ? (int) $_POST['partner_id'] : 0;
+        $price      = isset($_POST['partner_price']) ? $_POST['partner_price'] : '';
+        $note       = isset($_POST['partner_note']) ? $_POST['partner_note'] : '';
+
+        if (!$request_id || !$partner_id) {
+            wp_die('Invalid request/partner');
+        }
+
+        if (!class_exists('ESAVEST_Core_CPT_Price')) {
+            wp_die('Price module not loaded');
+        }
+
+        $created = ESAVEST_Core_CPT_Price::create_price($request_id, $partner_id, $price, $note);
+
+        // Redirect back to request edit
+        $url = admin_url('post.php?post=' . $request_id . '&action=edit');
+
+        if (is_wp_error($created)) {
+            $url = add_query_arg('es_price_err', '1', $url);
+        } else {
+            $url = add_query_arg('es_price_added', '1', $url);
+        }
+
+        wp_redirect($url);
+        exit;
+    }
+
+
 
     public function render_meta_box($post) {
 
@@ -256,7 +336,7 @@ class ESAVEST_Core_CPT_Request {
 
                 // ✅ Optional helpful columns
                 $new['es_qty']      = 'Qty';
-                $new['es_zip']      = 'ZIP';
+                $new['es_price_req'] = 'Price Req';
                 $new['es_date']     = 'Delivery Date';
             }
         }
@@ -313,11 +393,27 @@ class ESAVEST_Core_CPT_Request {
             return;
         }
 
-        if ($column === 'es_zip') {
-            $zip = get_post_meta($post_id, self::META_ZIP, true);
-            echo $zip !== '' ? esc_html($zip) : '—';
+        if ($column === 'es_price_req') {
+
+            if (!class_exists('ESAVEST_Core_CPT_Price')) {
+                echo '—';
+                return;
+            }
+
+            $prices = ESAVEST_Core_CPT_Price::get_prices_by_request($post_id);
+            $count  = is_array($prices) ? count($prices) : 0;
+
+            if ($count === 0) {
+                echo '<span style="color:#999;">0</span>';
+            } elseif ($count === 1) {
+                echo '<strong>1 </strong>';
+            } else {
+                echo '<strong>' . esc_html($count) . ' </strong>';
+            }
+
             return;
         }
+
 
         if ($column === 'es_date') {
             $date = get_post_meta($post_id, self::META_DELIVERY_DATE, true);

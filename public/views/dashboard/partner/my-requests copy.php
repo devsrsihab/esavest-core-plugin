@@ -1,16 +1,16 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-$post_type      = 'esavest_request';
-$meta_status    = '_esavest_request_status';
-$meta_customer  = '_esavest_request_customer_id';
-$meta_qty       = '_esavest_request_qty';
-$meta_unit      = '_esavest_request_unit';
-$meta_zip       = '_esavest_request_delivery_zip';
-$meta_date      = '_esavest_request_delivery_date';
+$post_type = 'esavest_request';
+$meta_status   = '_esavest_request_status';
+$meta_customer = '_esavest_request_customer_id';
+$meta_qty      = '_esavest_request_qty';
+$meta_unit     = '_esavest_request_unit';
+$meta_zip      = '_esavest_request_delivery_zip';
+$meta_date     = '_esavest_request_delivery_date';
 
-$filter  = sanitize_key($_GET['status'] ?? 'all');
-$allowed = ['all', 'pending', 'publish', 'completed'];
+$filter = sanitize_key($_GET['status'] ?? 'all');
+$allowed = ['all','pending','publish','completed'];
 if (!in_array($filter, $allowed, true)) $filter = 'all';
 
 $args = [
@@ -24,24 +24,21 @@ $args = [
 
 $q = new WP_Query($args);
 
-function esavest_req_badge($status) {
+function esavest_req_badge($status){
     if ($status === 'completed') return 'es-badge es-badge-success';
     if ($status === 'pending') return 'es-badge es-badge-warning';
     return 'es-badge es-badge-light';
 }
-
-$partner_id = get_current_user_id();
 ?>
 
 <div class="es-page-head">
     <div>
         <h2 class="es-page-title">Requests</h2>
-        <p class="es-page-sub">Browse customer requests and send your price.</p>
+        <p class="es-page-sub">Browse customer requests and create offers.</p>
     </div>
 
     <div class="es-head-actions">
-        <a class="es-btn es-btn-light" href="<?php echo esc_url(add_query_arg(['tab' => 'requests'])); ?>">Refresh</a>
-        <a class="es-btn es-btn-light" href="<?php echo esc_url(add_query_arg(['tab' => 'sent-prices'])); ?>">My Sent Prices</a>
+        <a class="es-btn es-btn-light" href="<?php echo esc_url(add_query_arg(['tab'=>'requests'])); ?>">Refresh</a>
     </div>
 </div>
 
@@ -71,20 +68,8 @@ $partner_id = get_current_user_id();
                     $d        = get_post_meta($rid, $meta_date, true);
                     $status   = (string) get_post_meta($rid, $meta_status, true);
                     $status   = $status ?: 'pending';
-
-                    // ✅ Block duplicate: one partner can send price once per request
-                    $already_sent = false;
-                    if (class_exists('ESAVEST_Core_CPT_Price')) {
-                        $already_sent = ESAVEST_Core_CPT_Price::partner_already_sent_for_request($rid, $partner_id);
-                    }
-
-                    $send_price_url = add_query_arg([
-                        'tab'        => 'send-price',
-                        'request_id' => $rid,
-                    ]);
-
                     ?>
-                    <tr class="<?php echo $already_sent ? 'is-locked' : ''; ?>">
+                    <tr>
                         <td>
                             <div class="es-title">
                                 <strong>#<?php echo (int)$rid; ?></strong>
@@ -92,28 +77,14 @@ $partner_id = get_current_user_id();
                             </div>
                         </td>
                         <td><?php echo $cust ? esc_html($cust->display_name) : '—'; ?></td>
-                        <td>
-                            <strong><?php echo esc_html($qty ? $qty : '—'); ?></strong>
-                            <span class="es-muted"><?php echo esc_html($unit); ?></span>
-                        </td>
+                        <td><strong><?php echo esc_html($qty ? $qty : '—'); ?></strong> <span class="es-muted"><?php echo esc_html($unit); ?></span></td>
                         <td><?php echo esc_html($zip ?: '—'); ?></td>
                         <td><?php echo esc_html($d ?: '—'); ?></td>
                         <td><span class="<?php echo esc_attr(esavest_req_badge($status)); ?>"><?php echo esc_html(ucfirst($status)); ?></span></td>
                         <td class="es-col-actions">
-
-
-                            <?php if(!$already_sent): ?>
-                                <a class="es-link" href="<?php echo esc_url($send_price_url); ?>">
-                                        <?php echo esc_html( 'Send Price' ) ?>
-                                 </a>
-                            <?php else: ?>
-
-                                <a class="es-link-disabled"
-                                    href="<?php echo esc_url(add_query_arg('tab','send-prices', site_url('/account/'))); ?>">
-                                    View Price
-                                </a>
-                            <?php endif; ?>
-
+                            <a class="es-link" href="<?php echo esc_url(get_edit_post_link($rid)); ?>">View</a>
+                            <span class="es-dot">•</span>
+                            <a class="es-link" href="<?php echo esc_url(admin_url('post-new.php?post_type=esavest_offer')); ?>">Create Offer</a>
                         </td>
                     </tr>
                 <?php endwhile; wp_reset_postdata(); ?>

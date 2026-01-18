@@ -5,7 +5,10 @@
   --es-text: #0f172a;
   --es-muted: #64748b;
   --es-primary: #2c3e50;
+  --es-primary-hover: #2c3e50bd;
   --es-accent: #ffc107;
+  --es-accent-100: #fff9e6;
+  --es-accent-dark: #cb9800;
   --es-link-color: #ffc107;
 }
 
@@ -1373,12 +1376,13 @@
   white-space: nowrap;
 }
 .es-link {
-  color: #1d4ed8;
+  color: var(--es-accent-dark);
   text-decoration: none;
   font-weight: 800;
 }
 .es-link:hover {
   text-decoration: underline;
+  color: var(--es-muted);
 }
 .es-dot {
   color: var(--es-muted);
@@ -1429,7 +1433,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 4px;
   border: 1px solid var(--es-border);
   background: #fff;
   color: #0f172a;
@@ -1622,4 +1626,96 @@
   .es-table {
     min-width: 720px;
   }
+}
+.es-send-price-wrap {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+}
+
+.es-send-price-left,
+.es-send-price-right {
+  background: #fff;
+  border: 1px solid #eef0f4;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.es-box-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.es-summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+.es-summary-list li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.es-summary-block {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.es-send-price-form .es-form-group {
+  margin-bottom: 14px;
+}
+
+.es-send-price-form .es-input {
+  width: 100%;
+}
+
+.es-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .es-send-price-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===== Price Status Card ===== */
+.es-price-status-card {
+  border: 1px solid #e6eaf0;
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+}
+
+.es-price-status-card h3 {
+  margin: 12px 0 6px;
+  font-size: 18px;
+}
+
+.es-price-status-card p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.es-price-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.es-price-locked {
+  background: #f9fafb;
+}
+
+.es-link-disabled {
+  color: var(--es-muted);
+}
+.es-link-disabled:hover {
+  color: inherit;
+}
+.es-table tr.is-locked {
+  background: #fff9e6;
 }

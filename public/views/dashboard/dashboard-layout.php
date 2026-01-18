@@ -38,10 +38,10 @@ $tab_map = [
     'partner' => [
         'dashboard' => 'dashboard-partner.php',
         'my-offers' => 'my-offers.php',
-        // ✅ IMPORTANT: your sidebar shows "Requests" but file is usually my-requests.php
-        // so ?tab=requests will load my-requests.php
         'requests'  => 'my-requests.php',
-        'prices'    => 'prices.php',
+        'send-prices'    => 'sent-prices.php',
+        // ✅ Send price (single request)
+        'send-price'  => 'send-price.php',
         'profile'   => 'profile.php',
         'settings'  => 'settings.php',
     ],

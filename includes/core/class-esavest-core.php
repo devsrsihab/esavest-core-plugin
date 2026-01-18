@@ -14,6 +14,8 @@ class ESAVEST_Core {
         // Helpers
         require_once ESAVEST_CORE_PATH . 'includes/helpers/functions-helpers.php';
         require_once ESAVEST_CORE_PATH . 'includes/helpers/functions-access.php';
+        require_once ESAVEST_CORE_PATH . 'includes/helpers/partner-send-price-handler.php';
+
 
         // CPTs
         require_once ESAVEST_CORE_PATH . 'includes/cpt/class-cpt-material.php';
@@ -48,6 +50,12 @@ class ESAVEST_Core {
         // Access guard
         require_once ESAVEST_CORE_PATH . 'includes/security/class-access-guard.php';
         ESAVEST_Access_Guard::init();
+
+        // Price CPT
+        require_once ESAVEST_CORE_PATH . 'includes/cpt/class-cpt-price.php';
+        $price_cpt = new ESAVEST_Core_CPT_Price();
+        $price_cpt->init();
+
 
  
 

@@ -67,7 +67,7 @@ $current_tab = sanitize_key($_GET['tab'] ?? 'dashboard');
         <div class="esavest-dashboard-item-title">Requests</div>
     </a>
     
-    <a class="esavest-dashboard-item <?php echo $current_tab === 'prices' ? 'active' : ''; ?>" href="<?php echo esavest_dash_link('prices'); ?>">
+    <a class="esavest-dashboard-item <?php echo $current_tab === 'send-prices' ? 'active' : ''; ?>" href="<?php echo esavest_dash_link('send-prices'); ?>">
         <div class="esavest-dashboard-item-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 1V23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
