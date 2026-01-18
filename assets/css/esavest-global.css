@@ -1,0 +1,320 @@
+/* =========================================================
+   ESAVEST ADMIN UI KIT
+   Author: ESAVEST
+   Purpose: Reusable admin UI system (No Bootstrap)
+========================================================= */
+
+/* ===============================
+   1. ROOT VARIABLES (GLOBAL THEME)
+================================= */
+:root {
+  /* Brand Colors */
+  --es-primary: #2563eb;
+  --es-primary-hover: #1d4ed8;
+  --es-secondary: #64748b;
+  --es-secondary-hover: #475569;
+
+  /* Status Colors */
+  --es-success: #16a34a;
+  --es-warning: #f59e0b;
+  --es-danger: #dc2626;
+
+  /* Base UI */
+  --es-bg: #ffffff;
+  --es-bg-soft: #f8fafc;
+  --es-border: #e5e7eb;
+  --es-text: #0f172a;
+  --es-text-muted: #64748b;
+
+  /* Radius & Spacing */
+  --es-radius: 8px;
+  --es-radius-sm: 6px;
+  --es-space-xs: 6px;
+  --es-space-sm: 10px;
+  --es-space-md: 16px;
+  --es-space-lg: 24px;
+
+  /* Typography */
+  --es-font-size: 14px;
+  --es-font-size-sm: 13px;
+  --es-font-weight: 500;
+}
+
+/* ===============================
+   2. RESET (ADMIN SAFE)
+================================= */
+.esavest-admin * {
+  box-sizing: border-box;
+}
+
+/* ===============================
+   3. LAYOUT SYSTEM
+================================= */
+.esavest-container {
+  width: 100%;
+  padding: var(--es-space-md);
+}
+
+.esavest-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--es-space-md);
+}
+
+.esavest-col-6 {
+  grid-column: span 6;
+}
+
+.esavest-col-12 {
+  grid-column: span 12;
+}
+
+@media (max-width: 768px) {
+  .esavest-col-6 {
+    grid-column: span 12;
+  }
+}
+
+/* ===============================
+   4. CARD COMPONENT
+================================= */
+.esavest-card {
+  background: var(--es-bg);
+  border: 1px solid var(--es-border);
+  border-radius: var(--es-radius);
+  padding: var(--es-space-md);
+}
+
+/* ===============================
+   5. FORM SYSTEM
+================================= */
+.esavest-form-group {
+  margin-bottom: var(--es-space-md);
+}
+
+.esavest-label {
+  display: block;
+  font-size: var(--es-font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--es-space-xs);
+  color: var(--es-text);
+}
+
+.esavest-input,
+.esavest-select,
+.esavest-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: var(--es-font-size);
+  border-radius: var(--es-radius-sm);
+  border: 1px solid var(--es-border);
+  background: var(--es-bg);
+  color: var(--es-text);
+}
+
+.esavest-input:focus,
+.esavest-select:focus,
+.esavest-textarea:focus {
+  outline: none;
+  border-color: var(--es-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* ===============================
+   6. BUTTON SYSTEM
+================================= */
+.esavest-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: var(--es-font-size);
+  font-weight: 600;
+  border-radius: var(--es-radius-sm);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.esavest-btn-primary {
+  background: var(--es-primary);
+  color: #fff;
+}
+
+.esavest-btn-primary:hover {
+  background: var(--es-primary-hover);
+}
+
+.esavest-btn-secondary {
+  background: var(--es-secondary);
+  color: #fff !important;
+}
+
+.esavest-btn-secondary:hover {
+  background: var(--es-secondary-hover);
+}
+
+/* ===============================
+   7. STATUS BADGE
+================================= */
+.esavest-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.esavest-badge-active {
+  background: rgba(22, 163, 74, 0.15);
+  color: var(--es-success);
+}
+
+.esavest-badge-inactive {
+  background: rgba(220, 38, 38, 0.15);
+  color: var(--es-danger);
+}
+
+/* ===============================
+   8. MATERIAL FORM SPECIFIC
+================================= */
+.esavest-material-form {
+  background: var(--es-bg-soft);
+  border-radius: var(--es-radius);
+  padding: var(--es-space-md);
+}
+
+/* ===============================
+   9. HELPER UTILITIES
+================================= */
+.esavest-text-muted {
+  color: var(--es-text-muted);
+  font-size: var(--es-font-size-sm);
+}
+
+.esavest-mb-sm {
+  margin-bottom: var(--es-space-sm);
+}
+.esavest-mb-md {
+  margin-bottom: var(--es-space-md);
+}
+.esavest-mt-md {
+  margin-top: var(--es-space-md);
+}
+/* ===============================
+   FIX: GRID COLUMN SUPPORT
+   (Required for Request & Offer Forms)
+================================= */
+
+/* 4 Column Support */
+.esavest-col-4 {
+  grid-column: span 4;
+}
+
+/* Mobile Fix */
+@media (max-width: 768px) {
+  .esavest-col-4 {
+    grid-column: span 12;
+  }
+}
+
+/* ===============================
+   FIX: TEXTAREA CONSISTENCY
+================================= */
+
+.esavest-textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ===============================
+   FIX: FORM RHYTHM & ALIGNMENT
+================================= */
+
+.esavest-form-group > .esavest-input,
+.esavest-form-group > .esavest-select,
+.esavest-form-group > .esavest-textarea {
+  margin-top: 2px;
+}
+
+/* ===============================
+   OPTIONAL: SECTION DIVIDER (SAFE)
+   (Only visual, no logic impact)
+================================= */
+
+.esavest-card hr {
+  border: none;
+  border-top: 1px solid var(--es-border);
+  margin: var(--es-space-lg) 0;
+}
+/* ===============================
+   FIX: MISSING GRID COLUMNS
+================================= */
+
+/* 8 Column Support */
+.esavest-col-8 {
+  grid-column: span 8;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .esavest-col-8 {
+    grid-column: span 12;
+  }
+}
+
+/* ===============================
+   FIX: GRID ALIGNMENT
+================================= */
+
+.esavest-grid {
+  align-items: start;
+}
+
+/* ===============================
+   FIX: ADMIN TEXTAREA WIDTH
+   (WP admin override issue)
+================================= */
+
+.esavest-admin textarea.esavest-textarea {
+  width: 100% !important;
+  max-width: 100%;
+  min-height: 120px;
+}
+
+/* ===============================
+   FIX: INPUT HEIGHT CONSISTENCY
+================================= */
+
+.esavest-input,
+.esavest-select {
+  height: 40px;
+}
+/* Unread request row */
+.esavest-unread-request {
+    background: #f0f7ff !important;
+}
+
+.esavest-unread-request .row-title {
+    font-weight: 600;
+}
+
+/* Seen badge */
+.esavest-seen-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.esavest-seen-unread {
+    background: rgba(37, 99, 235, 0.15);
+    color: #2563eb;
+}
+
+.esavest-seen-read {
+    background: rgba(22, 163, 74, 0.15);
+    color: #16a34a;
+}

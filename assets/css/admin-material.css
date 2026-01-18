@@ -1,0 +1,13 @@
+.esavest-material-form {
+  padding: 8px;
+}
+
+.esavest-material-form label {
+  font-size: 14px;
+}
+
+.esavest-material-form .form-control,
+.esavest-material-form .form-select {
+  font-size: 14px;
+  min-height: 42px;
+}
